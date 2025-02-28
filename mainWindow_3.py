@@ -38,16 +38,54 @@ class mainGUI(QWidget):
         self.video_frame.setStyleSheet("background-color: lightgray; border: 1px solid black;")
         self.main_layout.addWidget(self.video_frame, stretch=1)
 
-# Subclass QMainWindow to customize your application's main window
-#class MainWindow(QMainWindow):
-#    def __init__(self):
-#        super().__init__()
-#
-#        self.setWindowTitle("MakinaFleo-HSS")
-#        button = QPushButton("Press Me!")
-#
-#        # Set the central widget of the Window.
-#        self.setCentralWidget(button)
+        # Right Buttons
+        self.button_layout = QVBoxLayout()
+        self.main_layout.addLayout(self.button_layout)
+
+        self.button1 = QPushButton("Görev 1")
+        self.button1.setStyleSheet("background-color: yellow; font-size: 18px;")
+        self.button_layout.addWidget(self.button1)
+
+        self.button2 = QPushButton("Görev 2")
+        self.button2.setStyleSheet("background-color: pink; font-size: 18px;")
+        self.button_layout.addWidget(self.button2)
+
+        self.button3 = QPushButton("Görev 3")
+        self.button3.setStyleSheet("background-color: red; font-size: 18px;")
+        self.button_layout.addWidget(self.button3)
+
+        # Saat (Sağ Alt Köşe)
+        self.datetime_label = QLabel()
+        self.datetime_label.setStyleSheet("color: red; font-size: 15px;")
+        self.main_layout.addWidget(self.datetime_label, alignment=Qt.AlignRight | Qt.AlignBottom)
+
+        # Zamanlayıcı ile Saat Güncelleme
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_time)
+        self.timer.start(1000)
+
+        self.update_time()
+
+    def update_time(self):
+        """ Dinamik olarak saat ve tarihi günceller """
+        current_time = QDateTime.currentDateTime().toString("dd/MM/yyyy  HH:mm:ss")
+        self.datetime_label.setText(current_time)
+
+    def resizeEvent(self, event):
+        """ Pencere boyutu değiştiğinde bileşenleri yeniden ölçeklendirir """
+        width = self.width()
+        height = self.height()
+
+        # Gri ekranı güncelle
+        self.video_frame.setFixedSize(int(width * 0.75), int(height * 0.6))
+
+        # Logo boyutunu güncelle
+        self.logo_label.setFixedSize(int(width * 0.1), int(height * 0.15))
+
+        # Saatin konumunu sağ alt köşeye ayarla
+        self.datetime_label.move(width - 150, height - 30)
+
+        super().resizeEvent(event)
 
 app = QApplication(sys.argv)
 
